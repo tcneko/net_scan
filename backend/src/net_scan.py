@@ -42,7 +42,7 @@ async def fping(prefix: str):
     )
     fping_stderr = (await fping.communicate())[1]
     fping_out_list = fping_stderr.decode("utf-8").split("\n")
-    fping_out_ip_list = fping_out_list[-17-address_count:-17]
+    fping_out_ip_list = fping_out_list[-17 - address_count : -17]
     fping_out_summary_list = fping_out_list[-16:-1]
     alive_addr_list = []
     dead_addr_list = []
@@ -128,7 +128,11 @@ async def api_scan_network(body: ScanNetworkBody):
     prefix_list_s1 = extract_prefix(body.prefix_list, 16)
     prefix_list = split_prefix(prefix_list_s1, body.split_to)
 
-    if len(prefix_list) <= 0:
+    total_addr_num = 0
+    for prefix in prefix_list:
+        total_addr_num = total_addr_num + ipaddress.ip_network(prefix).num_addresses
+
+    if len(prefix_list) <= 0 or total_addr_num > 65535:
         json_msg = {"status": "fail", "reason": "form_error"}
         return json_msg
 
