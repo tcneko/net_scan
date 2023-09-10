@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  net_scan_frontend:
+    image: "net_scan_frontend:1.0.0"
+    network_mode: "host"
+    restart: "always"
+    environment:
+      - "TZ={{time_zone}}"
+    command:
+      - "-H"
+      - "{{frontend_listen_addr}}"
+      - "-p"
+      - "{{frontend_listen_port}}"

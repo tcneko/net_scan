@@ -1,0 +1,12 @@
+FROM python:3.11.5-bookworm as s1
+
+MAINTAINER tcneko <tcneko@outlook.com>
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends fping \
+  && apt-get clean
+RUN python3 -m pip install --no-cache-dir --upgrade aiohttp fastapi ipaddress pydantic uvicorn[standard]
+COPY src/ /opt/net_scan/
+WORKDIR /opt/net_scan
+
+ENTRYPOINT [ "python3", "-m", "uvicorn", "net_scan:app"]
